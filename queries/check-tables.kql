@@ -1,0 +1,5 @@
+// Run in Microsoft Sentinel / Log Analytics Logs.
+// Check which tables have data in the selected time range.
+search *
+| summarize Records=count() by $table
+| order by Records desc

@@ -1,0 +1,13 @@
+// Microsoft Sentinel Logs: use only if DeviceLogonEvents is present in this workspace.
+// Adjust the time range and device filter for your environment.
+let StartTime = datetime(2026-10-01T00:00:00Z);
+let EndTime = datetime(2026-11-01T00:00:00Z);
+DeviceLogonEvents
+| where Timestamp between (StartTime .. EndTime)
+| where DeviceName startswith "CORP-RA01-TE123"
+| where isnotempty(RemoteIP)
+| where ipv4_is_private(RemoteIP) == false
+| where LogonType in ("Network", "RemoteInteractive")
+| extend geo = geo_info_from_ip_address(RemoteIP)
+| summarize Attempts=count(), Successes=countif(ActionType == "LogonSuccess"), Failures=countif(ActionType == "LogonFailed"), FirstSeen=min(Timestamp), LastSeen=max(Timestamp) by RemoteIP, Country=tostring(geo.country), City=tostring(geo.city), Latitude=todouble(geo.latitude), Longitude=todouble(geo.longitude)
+| order by Attempts desc

@@ -1,0 +1,9 @@
+// Microsoft Defender XDR Advanced Hunting (not necessarily Sentinel Logs)
+let StartTime = datetime(2026-10-01T00:00:00Z);
+let EndTime = datetime(2026-11-01T00:00:00Z);
+DeviceProcessEvents
+| where Timestamp between (StartTime .. EndTime)
+| where DeviceName startswith "CORP-RA01-TE123"
+| where FileName in~ ("powershell.exe", "pwsh.exe") or ProcessCommandLine contains "powershell"
+| project Timestamp, DeviceName, AccountName, FileName, ProcessCommandLine, InitiatingProcessFileName, InitiatingProcessCommandLine
+| order by Timestamp desc
