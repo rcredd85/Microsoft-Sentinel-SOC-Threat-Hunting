@@ -1,60 +1,46 @@
-# Microsoft Sentinel | SOC Threat Hunting & Authentication Monitoring
+# Microsoft Sentinel | Inbound Authentication Origins & SOC Threat Hunting
 
-Hands-on cybersecurity portfolio project documenting a Microsoft Sentinel workbook in a cyber-range SOC environment, with supporting Microsoft Defender for Endpoint (MDE) hunting workflows.
-
-> **Evidence note:** The original workbook requires organizational authentication. Screenshots and actual results have not been independently verified or included. Query examples below are templates; they must be validated against the tables available in your environment.
+**Cyber Range portfolio project** | Microsoft Sentinel · Microsoft Defender for Endpoint · Azure Log Analytics · KQL
 
 ## Project overview
 
-This project focuses on investigating inbound authentication origins, suspicious remote access, and potentially malicious endpoint processes. The intended workflow is to query relevant logs, filter noisy events, enrich public source IPs with geographic context, and pivot to endpoint telemetry for investigation.
+This project showcases a Microsoft Sentinel workbook that visualizes the geographic origins of inbound authentication activity and summarizes source-IP authentication outcomes. The goal is to help SOC analysts prioritize suspicious access patterns, pivot into endpoint telemetry, and document investigative leads.
+
+> **Portfolio evidence:** The screenshot below comes from the actual workbook. IP addresses and account names were redacted for public sharing. Counts shown are observed dashboard values, not proof of malicious activity. This is a static screenshot, not a publicly accessible live workbook.
+
+## Inbound authentication origins map
+
+![Redacted Microsoft Sentinel inbound authentication map and source-IP breakdown](screenshots/inbound-authentication-origins-redacted.png)
+
+The map plots geographically enriched authentication origins; the workbook labels bubble size as **total attempts**. The table provides **attempts, successes, failures, device counts, and accounts** by source IP.
+
+### Investigation observations
+
+- One displayed source has **317 attempts: 18 successes, 299 failures, across 28 devices**. This merits closer review for password spraying or other distributed targeting patterns, but the screenshot does not establish intent.
+- Another displayed source has **610 attempts: 301 successes and 309 failures across 2 devices**. Mixed outcomes justify checking account identities, timing, and logon types.
+- Other rows show sources with only successful logons. A success count alone is not evidence of compromise.
+- IP geolocation is approximate; it does not establish the physical location of an attacker.
+
+## Analyst workflow
+
+1. Review time window, data freshness, and workbook filters.
+2. Identify sources with unusual failure ratios, large device reach, or successful logons following failures.
+3. Pivot to `DeviceLogonEvents` for affected devices, accounts, logon types, and timestamps.
+4. Correlate with `DeviceProcessEvents`, `DeviceNetworkEvents`, and other available MDE telemetry.
+5. Document evidence, alternative explanations, and recommended next steps. Do not claim compromise without corroborating evidence.
+
+## Included KQL files
+
+- [`queries/sentinel-inbound-authentication.kql`](queries/sentinel-inbound-authentication.kql) — starter authentication investigation query
+- [`queries/mde-powershell-hunting.kql`](queries/mde-powershell-hunting.kql) — starter PowerShell investigation query
+- [`queries/check-tables.kql`](queries/check-tables.kql) — workspace table validation
+
+**Note:** The included queries are educational starting points and have not been verified against the workbook's exact schema or settings. The original workbook's KQL was not accessible from the provided private link.
 
 ## Tools and skills
 
-- Microsoft Sentinel / Azure Log Analytics
-- Microsoft Defender for Endpoint (MDE) Advanced Hunting
-- Kusto Query Language (KQL)
-- Authentication analysis, source-IP enrichment, process investigation
-- SOC documentation and incident triage
+Microsoft Sentinel, Microsoft Defender for Endpoint, Azure Log Analytics, Kusto Query Language, authentication analysis, geographic visualization, endpoint threat hunting, and incident investigation.
 
-## Investigation workflow
+## Access and data handling
 
-1. Confirm which tables are present in the Sentinel workspace and inspect the available time range.
-2. Find inbound authentication events, then examine successful and failed logons.
-3. Identify external source IPs and enrich them with approximate geographic data.
-4. Pivot to MDE process events for suspicious PowerShell or other execution.
-5. Document findings, limitations, and any validated indicators.
-
-## KQL examples
-
-- [`queries/sentinel-inbound-authentication.kql`](queries/sentinel-inbound-authentication.kql) — Sentinel-compatible example for the `DeviceLogonEvents` table **only if it is ingested into Log Analytics**.
-- [`queries/mde-powershell-hunting.kql`](queries/mde-powershell-hunting.kql) — Defender Advanced Hunting query for PowerShell process activity.
-- [`queries/check-tables.kql`](queries/check-tables.kql) — Identify available Log Analytics tables before selecting a data source.
-
-**Important:** MDE Advanced Hunting and Sentinel Logs are different query environments. `DeviceLogonEvents` may be available in Defender but absent from your Sentinel Log Analytics workspace. Do not interpret zero results as proof of no attack.
-
-## Screenshots
-
-Add sanitized screenshots from your own authenticated environment to the `screenshots/` folder:
-
-| Screenshot | What to capture |
-|---|---|
-| `01-workbook-overview.png` | Workbook title and overview visualizations |
-| `02-inbound-authentication.png` | Authentication origins visualization, including time filter |
-| `03-kql-query-results.png` | Successful query and results with sensitive fields redacted |
-| `04-mde-advanced-hunting.png` | Relevant MDE hunting query and results |
-
-**Do not upload:** access tokens, account email addresses, subscription or tenant identifiers, internal IPs/hostnames, personal information, or unapproved organizational data. Obtain permission to publish cyber-range screenshots. Avoid treating generated artwork as evidence screenshots.
-
-## Findings and limitations
-
-This repository documents an investigative method. No specific compromise, attack source, geographic attribution, incident count, or containment action is claimed without validated log evidence. Add observed findings after reviewing the actual query results.
-
-## LinkedIn Featured description
-
-**Title:** Microsoft Sentinel & Defender for Endpoint | SOC Threat Hunting Project
-
-**Description:** Hands-on cybersecurity portfolio project demonstrating KQL investigations, authentication monitoring, endpoint threat hunting, and SOC investigation workflows using Microsoft Sentinel, Azure Log Analytics, and Microsoft Defender for Endpoint.
-
-## Source workbook
-
-The workbook is hosted in a private Microsoft security tenant. The original link may be accessible only to authorized users. For public portfolio sharing, link to this repository instead.
+The source workbook is in an organization-controlled Microsoft security tenant. Recruiters may not have access to the live workbook. This repository provides a public, static view of the work. Before publishing, review the screenshot and queries for any remaining confidential details, and follow your organization's data-sharing policy.
