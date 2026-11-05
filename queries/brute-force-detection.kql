@@ -1,1 +1,16 @@
 
+let Lookback = 5h;
+let FailureThreshold = 10;
+DeviceLogonEvents
+| where Timestamp >= ago(Lookback)
+| where ActionType == "LogonFailed"
+| where isnotempty(RemoteIP)
+| summarize
+    FailedAttempts = count(),
+    TargetedAccounts = dcount(AccountName),
+    FirstSeen = min(Timestamp),
+    LastSeen = max(Timestamp)
+    by DeviceName, RemoteIP
+| where FailedAttempts >= FailureThreshold
+| order by FailedAttempts desc
+
