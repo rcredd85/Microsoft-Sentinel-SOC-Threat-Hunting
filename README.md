@@ -125,6 +125,33 @@ The workbook provides visibility into inbound authentication origins and support
 
 **Outcome:** Developed and documented a security-monitoring workflow that supports authentication analysis, threat hunting, and evidence-based SOC investigations.
 
+## KQL Threat Detection Queries
+
+This project includes reusable Kusto Query Language (KQL) queries designed to support SOC threat hunting, authentication monitoring, and security investigations.
+
+### Brute-Force Authentication Detection
+
+**Detection Objective:** Identify potential brute-force authentication attempts targeting Windows endpoints.
+
+**Detection Logic:**
+- Analyze Microsoft Defender `DeviceLogonEvents`.
+- Identify failed authentication attempts originating from the same remote IP address.
+- Group events by targeted device and source IP.
+- Flag sources generating 10 or more failed authentication attempts within a five-hour lookback window.
+- Report affected accounts, failure counts, and first/last observed timestamps.
+
+**MITRE ATT&CK Mapping:** T1110 — Brute Force
+
+**KQL Query:** [View Brute-Force Detection Query](queries/brute-force-detection.kql)
+
+**Investigation Value:** Helps SOC analysts identify repeated authentication failures that warrant further investigation. Detection results are investigative leads rather than confirmation of compromise.
+
+### Additional Security Hunting Queries
+
+The repository also includes queries supporting inbound authentication analysis, endpoint process investigations, and security telemetry validation.
+
+[View All KQL Queries](queries/)
+
 ### Investigation observations
 
 - One displayed source has **317 attempts: 18 successes, 299 failures, across 28 devices**. This merits closer review for password spraying or other distributed targeting patterns, but the screenshot does not establish intent.
