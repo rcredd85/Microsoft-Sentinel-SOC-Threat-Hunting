@@ -4,7 +4,21 @@
 
 ## Project overview
 
-This project showcases a Microsoft Sentinel workbook that visualizes the geographic origins of inbound authentication activity and summarizes source-IP authentication outcomes. The goal is to help SOC analysts prioritize suspicious access patterns, pivot into endpoint telemetry, and document investigative leads.
+This hands-on cybersecurity project demonstrates threat hunting and security monitoring using Microsoft Sentinel, Microsoft Defender for Endpoint, Azure Log Analytics, and Kusto Query Language (KQL).
+
+The investigation focuses on analyzing inbound Windows authentication activity, identifying suspicious remote access patterns, evaluating authentication failures and successes, and visualizing the geographic origins of source IP addresses.
+
+Using Microsoft Sentinel workbooks and endpoint security telemetry, I developed an investigative workflow to support the identification of potential brute-force attacks, unauthorized access attempts, and other suspicious authentication behavior.
+
+**Project Objectives:**
+- Analyze inbound authentication events using KQL.
+- Investigate suspicious login failures and successful authentications.
+- Visualize source IP geolocation using Microsoft Sentinel workbooks.
+- Correlate authentication activity with endpoint telemetry.
+- Identify potential indicators of compromise.
+- Document findings and investigative limitations.
+
+**Skills Demonstrated:** Threat Hunting | Microsoft Sentinel | Microsoft Defender XDR | KQL | SIEM Monitoring | Log Analysis | Incident Investigation | Security Visualization
 
 > **Portfolio evidence:** The screenshot below comes from the actual workbook. IP addresses and account names were redacted for public sharing. Counts shown are observed dashboard values, not proof of malicious activity. This is a static screenshot, not a publicly accessible live workbook.
 
