@@ -22,6 +22,42 @@ Using Microsoft Sentinel workbooks and endpoint security telemetry, I developed 
 
 > **Portfolio evidence:** The screenshot below comes from the actual workbook. IP addresses and account names were redacted for public sharing. Counts shown are observed dashboard values, not proof of malicious activity. This is a static screenshot, not a publicly accessible live workbook.
 
+## Threat Hunting Methodology
+
+This investigation follows a structured SOC threat-hunting workflow using Microsoft Sentinel, Microsoft Defender for Endpoint, and Kusto Query Language (KQL).
+
+### 1. Authentication Log Analysis
+- Examine Windows authentication events using `DeviceLogonEvents`.
+- Identify repeated failed authentication attempts.
+- Review successful logins for potentially suspicious access patterns.
+- Analyze source IP addresses, targeted devices, and account activity.
+
+### 2. Geographic Source Analysis
+- Use `geo_info_from_ip_address()` to enrich public source IP addresses.
+- Visualize inbound authentication origins through Microsoft Sentinel workbooks.
+- Compare authentication activity across geographic regions.
+- Identify unusual authentication patterns requiring further investigation.
+
+### 3. Endpoint Investigation
+- Review `DeviceProcessEvents` for suspicious process execution.
+- Examine `DeviceNetworkEvents` for unusual network connections.
+- Correlate authentication activity with related endpoint telemetry where available.
+- Investigate potential indicators of compromise.
+
+### 4. Threat Detection and Investigation
+- Develop KQL queries to identify potential brute-force authentication behavior.
+- Review authentication outcomes and suspicious remote access patterns.
+- Use MITRE ATT&CK to classify relevant observed techniques when supported by evidence.
+- Distinguish confirmed observations from potential security threats.
+
+### 5. Documentation and Reporting
+- Document investigative findings and relevant security telemetry.
+- Preserve screenshots and supporting evidence.
+- Identify limitations in available log data.
+- Recommend additional investigation when evidence is inconclusive.
+
+**Investigation Outcome:** Developed a repeatable threat-hunting workflow for examining inbound authentication activity, visualizing source IP origins, and supporting evidence-based SOC investigations.
+
 ## Inbound authentication origins map
 
 ![Redacted Microsoft Sentinel inbound authentication map and source-IP breakdown](screenshots/inbound-authentication-origins-redacted.png)
