@@ -64,6 +64,67 @@ This investigation follows a structured SOC threat-hunting workflow using Micros
 
 The map plots geographically enriched authentication origins; the workbook labels bubble size as **total attempts**. The table provides **attempts, successes, failures, device counts, and accounts** by source IP.
 
+## Investigation Results & Key Findings
+
+### 1. Inbound Authentication Activity
+
+The Microsoft Sentinel workbook provides a geographic visualization of inbound Windows authentication activity.
+
+**Observations:**
+- Authentication source IP addresses are distributed across multiple geographic regions.
+- The workbook displays authentication activity using geographic markers.
+- Source IP authentication outcomes can be examined to distinguish successful and failed login attempts.
+- Geographic distribution provides investigative context but does not independently establish malicious activity.
+
+### 2. Potential Brute-Force Activity
+
+Repeated authentication failures originating from the same source IP address may indicate password guessing or brute-force attempts.
+
+**Investigation Approach:**
+- Group authentication events by source IP and targeted device.
+- Count failed authentication attempts within a defined time window.
+- Review targeted accounts and authentication outcomes.
+- Investigate whether successful authentication followed repeated failures.
+
+**MITRE ATT&CK:** T1110 — Brute Force (potential technique; requires supporting evidence).
+
+### 3. Suspicious Remote Access Investigation
+
+Authentication telemetry can support investigations into potentially unauthorized remote access.
+
+**Investigation Approach:**
+- Examine network and remote-interactive authentication events.
+- Review source IP addresses, device names, and account activity.
+- Correlate authentication events with endpoint process and network telemetry where available.
+- Evaluate suspicious activity using additional evidence before determining whether compromise occurred.
+
+### 4. Security Monitoring and Visualization
+
+The Microsoft Sentinel workbook supports SOC investigations by presenting authentication activity in a visual format.
+
+**Capabilities Demonstrated:**
+- Geographic source IP visualization
+- Authentication outcome analysis
+- KQL-based security investigation
+- Identification of potentially suspicious authentication patterns
+- Evidence-based investigative documentation
+
+### 5. Investigation Limitations
+
+- Geographic IP locations are approximate.
+- Authentication failures alone do not prove an attack.
+- Successful authentication does not independently establish unauthorized access.
+- The geographic map does not establish attacker identity or intent.
+- Additional endpoint and authentication evidence is required to confirm compromise.
+
+### Investigation Summary
+
+This project demonstrates a structured approach to authentication threat hunting using Microsoft Sentinel, Microsoft Defender for Endpoint, Azure Log Analytics, and KQL.
+
+The workbook provides visibility into inbound authentication origins and supports further investigation of potentially suspicious access patterns.
+
+**Outcome:** Developed and documented a security-monitoring workflow that supports authentication analysis, threat hunting, and evidence-based SOC investigations.
+
 ### Investigation observations
 
 - One displayed source has **317 attempts: 18 successes, 299 failures, across 28 devices**. This merits closer review for password spraying or other distributed targeting patterns, but the screenshot does not establish intent.
